@@ -22,6 +22,8 @@ export class PasswordGeneratorComponent implements OnInit {
 
   newPassword: string = '';
 
+  disabledButton: boolean = true;
+
   getListCheckboxes() {
     return [
       { id: 1, name: 'chkLetters', title: 'Use Letters' },
@@ -41,7 +43,7 @@ export class PasswordGeneratorComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       passLength: ['', [Validators.required, Validators.min(4)]],
-      chkConditions: new FormArray([], Validation.validateCheckboxes(1)),
+      chkConditions: new FormArray([]),
     });
 
     of(this.getListCheckboxes()).subscribe((conditions) => {
@@ -81,4 +83,32 @@ export class PasswordGeneratorComponent implements OnInit {
   onCheckBoxTick(event: any, formField: any, key: any) {
     console.log(key);
   }
+
+  opcionChecked(opcion: any, event: any) {
+    console.log(opcion);
+    /*
+    this.opciones.map((op) => {
+      if (op.name == opcion.name) {
+        op.value = event.target.checked;
+      }
+    });
+    */
+   this.disabledButton = this.validarCheckbox();
+
+      
+  }
+
+  validarCheckbox():boolean {
+
+    var disable:boolean = true; 
+
+    this.chkConditionsFormArray.value.forEach((op: boolean) => {
+      if (op) {
+        disable = false
+      } 
+    });
+
+    return disable
+  }
+
 }
