@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { of } from 'rxjs';
-import Validation from './utils/validation';
-import { RandomGenerator } from './utils/random-generator';
+import { PasswordService } from '../data/password.service';
 
+const getListCheckboxes = () => [
+  { id: 1, name: 'chkLetters', title: 'Use Letters' },
+  { id: 2, name: 'chkNumbers', title: 'Use Numbers' },
+  { id: 3, name: 'chkSymbols', title: 'Use Symbols' },
+];
 @Component({
   selector: 'app-password-generator',
   templateUrl: './password-generator.component.html',
@@ -24,19 +28,11 @@ export class PasswordGeneratorComponent implements OnInit {
 
   disabledButton: boolean = true;
 
-  getListCheckboxes() {
-    return [
-      { id: 1, name: 'chkLetters', title: 'Use Letters' },
-      { id: 2, name: 'chkNumbers', title: 'Use Numbers' },
-      { id: 3, name: 'chkSymbols', title: 'Use Symbols' },
-    ];
-  }
-
   get chkConditionsFormArray() {
     return this.form.controls.chkConditions as FormArray;
   }
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private passwordServices: PasswordService) {
     this.text = 'Button was clicked';
   }
 
@@ -46,7 +42,7 @@ export class PasswordGeneratorComponent implements OnInit {
       chkConditions: new FormArray([]),
     });
 
-    of(this.getListCheckboxes()).subscribe((conditions) => {
+    of(getListCheckboxes()).subscribe((conditions) => {
       this.arrayOfConditions = conditions;
       this.addCheckboxes();
     });
@@ -64,51 +60,32 @@ export class PasswordGeneratorComponent implements OnInit {
     this.submitted = true;
 
     if (this.form.invalid) {
-      console.log('form invalido');
+      alert('form invalid');
     }
 
-    // const useChars: boolean =
-    console.log(this.chkConditionsFormArray.value);
-
-    const randomPass: RandomGenerator = new RandomGenerator(
-      parseInt(this.passLength),
-      this.chkConditionsFormArray.value[0], // text
-      this.chkConditionsFormArray.value[1], // number
-      this.chkConditionsFormArray.value[2] // symbol
-    );
-
-    this.newPassword = randomPass.password;
+    this.passwordServices
+      .getPassword(
+        parseInt(this.passLength),
+        this.chkConditionsFormArray.value[0], // text
+        this.chkConditionsFormArray.value[1], // number
+        this.chkConditionsFormArray.value[2] // symbol
+      )
+      .subscribe((result) => {this.newPassword = result});
   }
 
-  onCheckBoxTick(event: any, formField: any, key: any) {
-    console.log(key);
+  optionChecked() {
+    this.disabledButton = this.validateCheckbox();
   }
 
-  opcionChecked(opcion: any, event: any) {
-    console.log(opcion);
-    /*
-    this.opciones.map((op) => {
-      if (op.name == opcion.name) {
-        op.value = event.target.checked;
-      }
-    });
-    */
-   this.disabledButton = this.validarCheckbox();
-
-      
-  }
-
-  validarCheckbox():boolean {
-
-    var disable:boolean = true; 
+  validateCheckbox(): boolean {
+    let disable: boolean = true;
 
     this.chkConditionsFormArray.value.forEach((op: boolean) => {
       if (op) {
-        disable = false
-      } 
+        disable = false;
+      }
     });
 
-    return disable
+    return disable;
   }
-
 }
