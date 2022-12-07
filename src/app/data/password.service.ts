@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class PasswordService {
-  password: string = '';
+  
 
   getPassword(
     length: number,
@@ -14,22 +14,22 @@ export class PasswordService {
     symbol: boolean = false
   ): Observable<string> {
     let i: number = 0;
-    this.password = '';
+    let password: string = '';
     while (i < length) {
       if (text && i < length) {
-        this.password += this.getRandomLower();
+        password += this.getRandomLower();
         i += 1;
       }
       if (numeric && i < length) {
-        this.password += this.getRandomNumber();
+        password += this.getRandomNumber();
         i += 1;
       }
       if (symbol && i < length) {
-        this.password += this.getRandomSymbol();
+        password += this.getRandomSymbol();
         i += 1;
       }
     }
-    return of(this.password);
+    return of(password);
   }
 
   getRandomLower(): String {
