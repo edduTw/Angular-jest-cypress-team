@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
 import { of } from 'rxjs';
 import { PasswordService } from '../data/password.service';
+import { minSelectedCheckboxes } from '../shared/validators/checkboxValidator';
 
 const getListCheckboxes = () => [
   { id: 1, name: 'chkLetters', title: 'Use Letters' },
@@ -39,7 +40,7 @@ export class PasswordGeneratorComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       passLength: ['', [Validators.required, Validators.min(4)]],
-      chkConditions: new FormArray([]),
+      chkConditions: new FormArray([], minSelectedCheckboxes(1)),
     });
 
     of(getListCheckboxes()).subscribe((conditions) => {
@@ -72,20 +73,5 @@ export class PasswordGeneratorComponent implements OnInit {
       )
       .subscribe((result) => {this.newPassword = result});
   }
-
-  optionChecked() {
-    this.disabledButton = this.validateCheckbox();
-  }
-
-  validateCheckbox(): boolean {
-    let disable: boolean = true;
-
-    this.chkConditionsFormArray.value.forEach((op: boolean) => {
-      if (op) {
-        disable = false;
-      }
-    });
-
-    return disable;
-  }
+  
 }
