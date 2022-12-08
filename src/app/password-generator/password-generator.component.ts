@@ -16,8 +16,7 @@ const getListCheckboxes = () => [
 })
 
 export class PasswordGeneratorComponent implements OnInit {
-  text: string = '';
-
+  
   arrayOfConditions: any[] = [];
 
   form!: FormGroup;
@@ -34,9 +33,7 @@ export class PasswordGeneratorComponent implements OnInit {
     return this.form.controls.chkConditions as FormArray;
   }
 
-  constructor(private formBuilder: FormBuilder, private passwordServices: PasswordService) {
-    this.text = 'Button was clicked';
-  }
+  constructor(private formBuilder: FormBuilder, private passwordServices: PasswordService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
