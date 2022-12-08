@@ -61,10 +61,6 @@ export class PasswordGeneratorComponent implements OnInit {
   generateClicked() {
     this.submitted = true;
 
-    if (this.form.invalid) {
-      alert('form invalid');
-    }
-
     this.passwordServices
       .getPassword(
         parseInt(this.passLength),
