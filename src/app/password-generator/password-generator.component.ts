@@ -8,11 +8,13 @@ const getListCheckboxes = () => [
   { id: 2, name: 'chkNumbers', title: 'Use Numbers' },
   { id: 3, name: 'chkSymbols', title: 'Use Symbols' },
 ];
+
 @Component({
   selector: 'app-password-generator',
   templateUrl: './password-generator.component.html',
   styleUrls: ['./password-generator.component.scss'],
 })
+
 export class PasswordGeneratorComponent implements OnInit {
   text: string = '';
 
@@ -68,9 +70,9 @@ export class PasswordGeneratorComponent implements OnInit {
         parseInt(this.passLength),
         this.chkConditionsFormArray.value[0], // text
         this.chkConditionsFormArray.value[1], // number
-        this.chkConditionsFormArray.value[2] // symbol
+        this.chkConditionsFormArray.value[2], // symbol
       )
-      .subscribe((result) => {this.newPassword = result});
+      .subscribe((result) => { this.newPassword = result });
   }
 
   optionChecked() {
@@ -81,9 +83,7 @@ export class PasswordGeneratorComponent implements OnInit {
     let disable: boolean = true;
 
     this.chkConditionsFormArray.value.forEach((op: boolean) => {
-      if (op) {
-        disable = false;
-      }
+      disable = op ? !op : disable;
     });
 
     return disable;
