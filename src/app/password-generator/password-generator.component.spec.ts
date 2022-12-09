@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { By } from '@angular/platform-browser';
 import { PasswordGeneratorComponent } from './password-generator.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -45,5 +45,19 @@ describe('PasswordGeneratorComponent', () => {
     fixture.detectChanges();
 
     expect(inputLength?.hasError('min')).toBeFalsy();
+  })
+
+  it('at least one checkbox must be selected', () => {
+    const app = fixture.componentInstance;
+    expect(app.disabledButton).toBeTruthy();
+    const checkbox1 = fixture.debugElement.query(By.css('#chkLetters')).nativeElement;
+    expect(checkbox1.checked).toBeFalsy();
+    expect(app.disabledButton).toBeTruthy();
+
+    checkbox1.click();
+    fixture.detectChanges();
+    expect(checkbox1.checked).toBeTruthy()
+    expect(app.disabledButton).toBeFalsy();
+    
   })
 });
