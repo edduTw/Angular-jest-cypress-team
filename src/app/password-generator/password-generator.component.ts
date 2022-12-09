@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { of } from 'rxjs';
 import { PasswordService } from '../data/password.service';
 
@@ -14,7 +14,6 @@ const getListCheckboxes = () => [
   styleUrls: ['./password-generator.component.scss'],
 })
 export class PasswordGeneratorComponent implements OnInit {
-  text: string = '';
 
   arrayOfConditions: any[] = [];
 
@@ -32,9 +31,7 @@ export class PasswordGeneratorComponent implements OnInit {
     return this.form.controls.chkConditions as FormArray;
   }
 
-  constructor(private formBuilder: FormBuilder, private passwordServices: PasswordService) {
-    this.text = 'Button was clicked';
-  }
+  constructor(private formBuilder: FormBuilder, private passwordServices: PasswordService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -50,10 +47,6 @@ export class PasswordGeneratorComponent implements OnInit {
 
   private addCheckboxes() {
     this.arrayOfConditions.forEach(() => this.chkConditionsFormArray.push(new FormControl(false)));
-  }
-
-  get f(): { [key: string]: AbstractControl } {
-    return this.form.controls;
   }
 
   generateClicked() {
