@@ -40,5 +40,10 @@ describe('PasswordGeneratorComponent', () => {
     fixture.detectChanges();
 
     expect(inputLength?.hasError('min')).toBeTruthy();
+
+    inputLength?.setValue('5');
+    fixture.detectChanges();
+
+    expect(inputLength?.hasError('min')).toBeFalsy();
   })
 });
